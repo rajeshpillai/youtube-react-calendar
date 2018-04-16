@@ -58,6 +58,14 @@ tr {
     border-radius: 2%;
     color: white;
 }
+.selected-day {
+    background-color:yellow;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 2%;
+    color: black;
+}
 
 .month-popup {
     position: absolute;

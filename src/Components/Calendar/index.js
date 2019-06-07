@@ -46,6 +46,8 @@ export default class Calendar extends React.Component {
         return firstDay;
     }
 
+
+
     setMonth = (month) => {
         let monthNo = this.months.indexOf(month);
         let dateContext = Object.assign({}, this.state.dateContext);
@@ -73,6 +75,19 @@ export default class Calendar extends React.Component {
         this.props.onPrevMonth && this.props.onPrevMonth();
     }
 
+    // todo
+    lastNDays = (n) => {
+        let dateContext = Object.assign({}, this.state.dateContext);
+        dateContext = moment(dateContext).subtract(1, "month");
+
+        let lastDaysInMonth = dateContext.endOf('month').daysInMonth();
+
+        console.log('eom: ', lastDaysInMonth);
+        console.log('eom-n: ', lastDaysInMonth - n);
+
+        return lastDaysInMonth - n;
+    }
+
     onSelectChange = (e, data) => {
         this.setMonth(data);
         this.props.onMonthChange && this.props.onMonthChange();
@@ -82,7 +97,7 @@ export default class Calendar extends React.Component {
         let popup = props.data.map((data) => {
             return (
                 <div key={data}>
-                    <a href="#" onClick={(e)=> {this.onSelectChange(e, data)}}>
+                    <a href="#" onClick={(e) => { this.onSelectChange(e, data) }}>
                         {data}
                     </a>
                 </div>
@@ -105,10 +120,10 @@ export default class Calendar extends React.Component {
     MonthNav = () => {
         return (
             <span className="label-month"
-                onClick={(e)=> {this.onChangeMonth(e, this.month())}}>
+                onClick={(e) => { this.onChangeMonth(e, this.month()) }}>
                 {this.month()}
                 {this.state.showMonthPopup &&
-                 <this.SelectList data={this.months} />
+                    <this.SelectList data={this.months} />
                 }
             </span>
         );
@@ -144,20 +159,20 @@ export default class Calendar extends React.Component {
     YearNav = () => {
         return (
             this.state.showYearNav ?
-            <input
-                defaultValue = {this.year()}
-                className="editor-year"
-                ref={(yearInput) => { this.yearInput = yearInput}}
-                onKeyUp= {(e) => this.onKeyUpYear(e)}
-                onChange = {(e) => this.onYearChange(e)}
-                type="number"
-                placeholder="year"/>
-            :
-            <span
-                className="label-year"
-                onDoubleClick={(e)=> { this.showYearEditor()}}>
-                {this.year()}
-            </span>
+                <input
+                    defaultValue={this.year()}
+                    className="editor-year"
+                    ref={(yearInput) => { this.yearInput = yearInput }}
+                    onKeyUp={(e) => this.onKeyUpYear(e)}
+                    onChange={(e) => this.onYearChange(e)}
+                    type="number"
+                    placeholder="year" />
+                :
+                <span
+                    className="label-year"
+                    onDoubleClick={(e) => { this.showYearEditor() }}>
+                    {this.year()}
+                </span>
         );
     }
 
@@ -179,11 +194,13 @@ export default class Calendar extends React.Component {
             )
         });
 
+        let startOfLastDay = this.lastNDays(this.firstDayOfMonth()-1);
+
         let blanks = [];
         for (let i = 0; i < this.firstDayOfMonth(); i++) {
-            blanks.push(<td key={i * 80} className="emptySlot">
-                {""}
-                </td>
+            blanks.push(<td key={i * 80} className="emptySlot week-day week-day-last">
+                {startOfLastDay++}
+            </td>
             );
         }
 
@@ -191,11 +208,11 @@ export default class Calendar extends React.Component {
 
         let daysInMonth = [];
         for (let d = 1; d <= this.daysInMonth(); d++) {
-            let className = (d == this.currentDay() ? "day current-day": "day");
+            let className = (d == this.currentDay() ? "day current-day" : "day");
             let selectedClass = (d == this.state.selectedDay ? " selected-day " : "")
             daysInMonth.push(
                 <td key={d} className={className + selectedClass} >
-                    <span onClick={(e)=>{this.onDayClick(e, d)}}>{d}</span>
+                    <span onClick={(e) => { this.onDayClick(e, d) }}>{d}</span>
                 </td>
             );
         }
@@ -224,7 +241,7 @@ export default class Calendar extends React.Component {
 
         let trElems = rows.map((d, i) => {
             return (
-                <tr key={i*100}>
+                <tr key={i * 100}>
                     {d}
                 </tr>
             );
@@ -242,10 +259,10 @@ export default class Calendar extends React.Component {
                             </td>
                             <td colSpan="2" className="nav-month">
                                 <i className="prev fa fa-fw fa-chevron-left"
-                                    onClick={(e)=> {this.prevMonth()}}>
+                                    onClick={(e) => { this.prevMonth() }}>
                                 </i>
                                 <i className="prev fa fa-fw fa-chevron-right"
-                                    onClick={(e)=> {this.nextMonth()}}>
+                                    onClick={(e) => { this.nextMonth() }}>
                                 </i>
 
                             </td>

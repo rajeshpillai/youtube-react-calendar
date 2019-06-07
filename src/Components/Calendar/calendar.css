@@ -39,6 +39,10 @@ tr {
     font-size: 0.8em;
 }
 
+.week-day-last {
+    color: lightgrey;
+}
+
 .day {
     font-size: 0.8em;
 }
